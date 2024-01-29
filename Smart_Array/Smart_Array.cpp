@@ -11,7 +11,12 @@ public:
 	}
 
 	~smart_array() {
-		delete[] ptr;
+
+		if(ptr != nullptr) {
+
+			delete[] ptr;
+
+		}
 	}
 
 	void add_element(int elm) {
@@ -25,7 +30,19 @@ public:
 	int get_element(int position) {
 		return  ptr[position - 1];
 	}
-	
+
+	smart_array& operator=(const smart_array& other)
+	{
+		delete[] ptr;
+		if (size_ < other.size_) {
+			throw std::runtime_error("Array overflow");
+		}
+		for (int i = 0; i < size_; i++) {
+			ptr[i] = other.ptr[i];
+		}
+		return *this;
+	}
+
 };
 
 
@@ -36,9 +53,13 @@ int main()
 		arr.add_element(1);
 		arr.add_element(4);
 		arr.add_element(155);
-		arr.add_element(14);
-		arr.add_element(15);
-		std::cout << arr.get_element(1) << std::endl;
+
+		smart_array new_array(2);
+		new_array.add_element(44);
+		new_array.add_element(34);
+
+		arr = new_array;
+		std::cout << arr.get_element(1);
 	}
 	catch (const std::exception& ex) {
 		std::cout << ex.what() << std::endl;
