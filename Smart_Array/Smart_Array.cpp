@@ -20,15 +20,18 @@ public:
 	}
 
 	void add_element(int elm) {
-		ptr[pos_arr] = elm;
-		pos_arr++;
 		if (pos_arr > size_) {
 			throw std::runtime_error("Array out of bounds");
 		}
+		ptr[pos_arr] = elm;
+		pos_arr++;
 	}
 
 	int get_element(int position) {
-		return  ptr[position - 1];
+		if (position < 0 || position > size_) {
+			throw std::runtime_error("The requested element does not exist");
+		}
+		else return  ptr[position];
 	}
 
 	smart_array& operator=(const smart_array& other)
@@ -37,7 +40,11 @@ public:
 		if (size_ < other.size_) {
 			throw std::runtime_error("Array overflow");
 		}
-		for (int i = 0; i < size_; i++) {
+
+		size_ = other.size_;
+		pos_arr = other.pos_arr;
+		ptr = new int[size_];
+		for (int i = 0; i < other.pos_arr; i++) {	
 			ptr[i] = other.ptr[i];
 		}
 		return *this;
@@ -59,7 +66,7 @@ int main()
 		new_array.add_element(34);
 
 		arr = new_array;
-		std::cout << arr.get_element(1);
+		std::cout << arr.get_element(0);
 	}
 	catch (const std::exception& ex) {
 		std::cout << ex.what() << std::endl;
