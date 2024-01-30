@@ -28,7 +28,7 @@ public:
 	}
 
 	int get_element(int position) {
-		if (position < 0 || position > size_) {
+		if (position < 0 || position >= size_) {
 			throw std::runtime_error("The requested element does not exist");
 		}
 		else return  ptr[position];
@@ -37,10 +37,6 @@ public:
 	smart_array& operator=(const smart_array& other)
 	{
 		delete[] ptr;
-		if (size_ < other.size_) {
-			throw std::runtime_error("Array overflow");
-		}
-
 		size_ = other.size_;
 		pos_arr = other.pos_arr;
 		ptr = new int[size_];
@@ -67,6 +63,7 @@ int main()
 
 		arr = new_array;
 		std::cout << arr.get_element(0);
+		std::cout << arr.get_element(2);
 	}
 	catch (const std::exception& ex) {
 		std::cout << ex.what() << std::endl;
